@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { SyncOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { Context } from "../context";
+import { useRouter } from "next/router";
 
 const Login = () => {
   const [email, setEmail] = useState("gj@gmail.com");
@@ -13,9 +14,9 @@ const Login = () => {
   // state access
   const { state, dispatch } = useContext(Context);
 
-  console.log(state);
+  const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     try {
       setLoading(true);
@@ -29,6 +30,7 @@ const Login = () => {
       });
 
       window.localStorage.setItem("user", JSON.stringify(data));
+      router.push("/");
 
       setLoading(false);
     } catch (err) {
@@ -46,7 +48,7 @@ const Login = () => {
           <input
             type="email"
             className="form-control mb-4 p-4"
-            onChange={(e) => {
+            onChange={e => {
               setEmail(e.target.value);
             }}
             value={email}
@@ -56,7 +58,7 @@ const Login = () => {
           <input
             type="password"
             className="form-control mb-4 p-4"
-            onChange={(e) => {
+            onChange={e => {
               setPassword(e.target.value);
             }}
             value={password}
