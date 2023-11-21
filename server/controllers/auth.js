@@ -4,14 +4,17 @@ import jwt from "jsonwebtoken";
 
 export const login = async (req, res) => {
   try {
-    console.log(req.body);
     const { email, password } = req.body;
+    console.log(email);
 
     //check if our db has user with that email
-    const user = await User.findOne({ email }).exex();
+    let user = await User.findOne({ email: email });
+    console.log(user);
     if (!user) return res.status(400).send("No user found");
 
     const match = await comparePassword(password, user.password);
+    if (!match)
+      return res.status(400).send("Either email or password is wrong");
 
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
@@ -46,7 +49,6 @@ export const register = async (req, res) => {
 
     // hash the password
     const hashedPassword = await hashPassword(password);
-    console.log("hashedPassword:", hashedPassword);
 
     const user = new User({
       name,
@@ -54,7 +56,6 @@ export const register = async (req, res) => {
       password: hashedPassword,
     });
     await user.save();
-    console.log("Saved user", user);
     return res.json({ ok: true });
   } catch (err) {
     console.log(err);
