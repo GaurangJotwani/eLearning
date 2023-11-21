@@ -1,1 +1,2 @@
-client/.next/
+client/.next/*
+server/.env
