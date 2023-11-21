@@ -1,20 +1,30 @@
-import { useState } from 'react';
-import axios from 'axios';
+import { useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { SyncOutlined } from "@ant-design/icons";
+import Link from "next/link";
 
 const Register = () => {
-  const [name, setName] = useState('GJ');
-  const [email, setEmail] = useState('gj@gmail.com');
-  const [password, setPassword] = useState('hey');
+  const [name, setName] = useState("GJ");
+  const [email, setEmail] = useState("gj@gmail.com");
+  const [password, setPassword] = useState("heythere");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const { data } = await axios.post(`http://localhost:8000/api/register`, {
-      name,
-      email,
-      password,
-    });
-    console.log(data);
+    try {
+      setLoading(true);
+      const { data } = await axios.post(`/api/register`, {
+        name,
+        email,
+        password,
+      });
+      toast.success("Registration successful. Please Login");
+      setLoading(false);
+    } catch (err) {
+      toast.error(err.response.data);
+      setLoading(false);
+    }
   };
 
   return (
@@ -54,10 +64,17 @@ const Register = () => {
             required
           />
           <div className="d-grid">
-            <button type="submit" className="btn btn-primary">
-              Submit
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={!name || !email || !password || loading}
+            >
+              {loading ? <SyncOutlined spin /> : "Submit"}
             </button>
           </div>
+          <p className="text-center p-3">
+            Already Registered? <Link href="./login">Login</Link>
+          </p>
         </form>
       </div>
     </>
