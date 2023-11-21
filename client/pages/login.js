@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { SyncOutlined } from "@ant-design/icons";
@@ -16,7 +16,15 @@ const Login = () => {
 
   const router = useRouter();
 
-  const handleSubmit = async e => {
+  const { user } = state;
+
+  useEffect(() => {
+    if (user !== null) {
+      router.push("/");
+    }
+  }, [user]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
@@ -48,7 +56,7 @@ const Login = () => {
           <input
             type="email"
             className="form-control mb-4 p-4"
-            onChange={e => {
+            onChange={(e) => {
               setEmail(e.target.value);
             }}
             value={email}
@@ -58,7 +66,7 @@ const Login = () => {
           <input
             type="password"
             className="form-control mb-4 p-4"
-            onChange={e => {
+            onChange={(e) => {
               setPassword(e.target.value);
             }}
             value={password}
