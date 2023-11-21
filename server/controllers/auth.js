@@ -5,11 +5,9 @@ import jwt from "jsonwebtoken";
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(email);
 
     //check if our db has user with that email
     let user = await User.findOne({ email: email });
-    console.log(user);
     if (!user) return res.status(400).send("No user found");
 
     const match = await comparePassword(password, user.password);
