@@ -4,7 +4,7 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: ["next"],
+  extends: ["next", "prettier"],
   overrides: [
     {
       env: {
@@ -26,5 +26,9 @@ module.exports = {
     quotes: ["error", "double", { allowTemplateLiterals: true }],
     semi: ["error", "always"],
     "no-unused-vars": "warn",
+    "prettier/prettier": "error",
   },
+  plugins: [
+    "prettier", // Add this line
+  ],
 };

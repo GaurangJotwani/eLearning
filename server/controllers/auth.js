@@ -5,11 +5,9 @@ import jwt from "jsonwebtoken";
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(email);
 
     //check if our db has user with that email
     let user = await User.findOne({ email: email });
-    console.log(user);
     if (!user) return res.status(400).send("No user found");
 
     const match = await comparePassword(password, user.password);
@@ -31,6 +29,15 @@ export const login = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(400).send("Error. Try again");
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("token");
+    return res.json({ message: "Signout success" });
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -60,5 +67,15 @@ export const register = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(400).send("Error. Try Again");
+  }
+};
+
+export const currentUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.auth._id).select("-password").exec();
+    console.log("CURRENT_USER", user);
+    return res.json({ ok: true });
+  } catch (err) {
+    console.log(err);
   }
 };
