@@ -23,6 +23,7 @@ const TopNav = () => {
   const { user } = state;
 
   const router = useRouter();
+  const hi = 5;
 
   useEffect(() => {
     process.browser && setCurrent(window.location.pathname);
@@ -55,8 +56,11 @@ const TopNav = () => {
             children: [
               {
                 label: "Logout",
-                icon: <LogoutOutlined />,
                 onClick: () => logout(),
+              },
+              {
+                label: <Link href="/user">Dashboard</Link>,
+                key: "/user",
               },
             ],
           },
